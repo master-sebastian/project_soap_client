@@ -1,0 +1,11 @@
+https://router.vuejs.org/guide/#html
+https://medium.com/codingthesmartway-com-blog/vue-js-routing-with-vue-router-4c428fabb078
+
+change host y puerto
+
+https://stackoverflow.com/questions/47219819/how-to-change-port-number-in-vue-cli-project
+npm run serve -- --port 8000 --host 192.168.0.23
+
+https://www.npmjs.com/package/axios
+
+https://stackoverflow.com/questions/43807876/vuejs-webpack-static-folder-not-working-in-subfolder
