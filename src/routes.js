@@ -1,10 +1,10 @@
-import Login from './components/Login.vue'
+import ProductList from './components/ProductList.vue'
 import Calc from './components/Calc.vue'
 export const routes = [
   {
-    path: '/inicio',
-    name: 'Login',
-    component: Login
+    path: '/product',
+    name: 'ProductList',
+    component: ProductList
   },
   {
     path: '/upc-calc',
