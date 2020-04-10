@@ -8,9 +8,15 @@
       <div class="collapse navbar-collapse justify-content-between" id="navbarText">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="#">Home<span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="/#/product">|Ingresar como mesa|<span class="sr-only">(current)</span></a>
           </li>
-          <li class="nav-item dropdown ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="/#/product">|Mesas|<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/#/product">|Productos|<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item dropdown ml-auto" v-if="false">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Yo
             </a>

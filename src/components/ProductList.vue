@@ -26,16 +26,17 @@
                 <div class="table-responsive" style="height: 400px;overflow-y: auto;">
                     <table class="table">
                         <thead>
-                            <tr style="display: block;">
-                                <th scope="col">Nombre</th>
-                                <th scope="col" >Descripción</th>
-                                <th scope="col">Imagen</th>
-                                <th scope="col">Estado</th>
-                                <th scope="col">Fecha y hora</th>
-                                <th scope="col">Costo(COP)</th>
-                                <th scope="col">Iva (%)</th>
-                                <th scope="col">Ganancia (COP)</th>
-                                <th scope="col">Precio (COP)</th>
+                            <tr>
+                                <th scope="col" colspan="1">Nombre</th>
+                                <th scope="col" colspan="1" >Descripción</th>
+                                <th scope="col" colspan="1">Imagen</th>
+                                <th scope="col" colspan="1">Estado</th>
+                                <th scope="col" colspan="1">Fecha y hora</th>
+                                <th scope="col" colspan="1">Costo(COP)</th>
+                                <th scope="col" colspan="1">Iva (%)</th>
+                                <th scope="col" colspan="1">Ganancia (COP)</th>
+                                <th scope="col" colspan="1">Precio (COP)</th>
+                                <th scope="col" colspan="2">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -57,6 +58,7 @@
                                 <td>{{ producto.iva }}</td>
                                 <td>{{ getFormatMoney(producto.ganancia) }}</td>
                                 <td>{{ getFormatMoney(producto.precio) }}</td>
+                                <td><a class="btn btn-success" v-bind:href="'/#/product/edit/'+producto.id" style="margin-top: 8px">Editar</a></td>                                
                             </tr>
                             
                         </tbody>
@@ -171,7 +173,7 @@
                                         rowTable[colum.key.toString()] = contenido.getFormatDataTime(colum.value.date.toString())
                                     }
                                 }       
-                                rowTable['precio'] = rowTable['ganancia'] + rowTable['costo'] * (1 + rowTable['iva'])
+                                rowTable['precio'] = Math.round(100*(1*rowTable['ganancia'] + 1*rowTable['costo']) * (1 + 1*rowTable['iva']/100))/100
                                 dataTable.push(rowTable);
                             }
                         }else{
@@ -189,7 +191,7 @@
                                     rowTable[colum.key.toString()] = contenido.getFormatDataTime(colum.value.date.toString())
                                 }
                             }
-                            rowTable['precio'] = rowTable['ganancia'] + rowTable['costo'] * (1 + rowTable['iva'])
+                            rowTable['precio'] = Math.round(100*(1*rowTable['ganancia'] + 1*rowTable['costo']) * (1 + 1*rowTable['iva']/100))/100
                             dataTable.push(rowTable);
                         }
                         setTimeout(function(){
