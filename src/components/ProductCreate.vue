@@ -1,8 +1,8 @@
 <template>
-    <div>
+    <div class="text-center">
         <hr>
         <button v-if="inverso" type="buttom" class="btn btn-primary" @click="cambiar()">{{text}}</button>
-        <div class="card" v-if="!inverso">
+        <div class="card text-left" v-if="!inverso">
             <div class="card-header bg-dark text-white">
                 <button type="buttom" class="btn btn-danger" @click="cambiar()">X</button>
                 {{ $data['title'] }}  
@@ -98,8 +98,7 @@
       text: String,   
     },
     data: () => ({
-      example : "Que mas",
-      title: "Creacion de productos",
+      title: "Creación de productos",
       inverso: true,
       costo: 0,
       precio:0,

@@ -13,7 +13,7 @@
                         </div>
                         <div class="form-group col-md-1">
                             &nbsp;<br>
-                            <button type="buttom" class="btn btn-primary" @click="getListProducts()" style="margin-top: 8px">Buscar</button>                
+                            <button type="button" class="btn btn-primary" @click="getListProducts()" style="margin-top: 8px">Buscar</button>                
                         </div>
                     </div>
                     <div class="form-row">
@@ -27,16 +27,16 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th scope="col" colspan="1">Nombre</th>
-                                <th scope="col" colspan="1" >Descripción</th>
-                                <th scope="col" colspan="1">Imagen</th>
-                                <th scope="col" colspan="1">Estado</th>
-                                <th scope="col" colspan="1">Fecha y hora</th>
-                                <th scope="col" colspan="1">Costo(COP)</th>
-                                <th scope="col" colspan="1">Iva (%)</th>
-                                <th scope="col" colspan="1">Ganancia (COP)</th>
-                                <th scope="col" colspan="1">Precio (COP)</th>
-                                <th scope="col" colspan="2">Acciones</th>
+                                <th scope="col" colspan="1" class="text-center">Nombre</th>
+                                <th scope="col" colspan="1" class="text-center" >Descripción</th>
+                                <th scope="col" colspan="1" class="text-center">Imagen</th>
+                                <th scope="col" colspan="1" class="text-center">Estado</th>
+                                <th scope="col" colspan="1" class="text-center">Fecha y hora</th>
+                                <th scope="col" colspan="1" class="text-center">Costo(COP)</th>
+                                <th scope="col" colspan="1" class="text-center">Iva (%)</th>
+                                <th scope="col" colspan="1" class="text-center">Ganancia (COP)</th>
+                                <th scope="col" colspan="1" class="text-center">Precio (COP)</th>
+                                <th scope="col" colspan="1" class="text-center">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -59,6 +59,7 @@
                                 <td>{{ getFormatMoney(producto.ganancia) }}</td>
                                 <td>{{ getFormatMoney(producto.precio) }}</td>
                                 <td><a class="btn btn-success" v-bind:href="'/#/product/edit/'+producto.id" style="margin-top: 8px">Editar</a></td>                                
+
                             </tr>
                             
                         </tbody>

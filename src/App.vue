@@ -11,7 +11,7 @@
             <a class="nav-link" href="/#/product">|Ingresar como mesa|<span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item active">
-            <a class="nav-link" href="/#/product">|Mesas|<span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="/#/table">|Mesas|<span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item active">
             <a class="nav-link" href="/#/product">|Productos|<span class="sr-only">(current)</span></a>
