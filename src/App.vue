@@ -8,13 +8,25 @@
       <div class="collapse navbar-collapse justify-content-between" id="navbarText">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="/#/product">|Ingresar como mesa|<span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="/#/login">{{"  Ingresar como cliente  "}}<span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item active">
-            <a class="nav-link" href="/#/table">|Mesas|<span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="/#/login">{{"  Ingresar como administrador  "}}<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item dropdown ml-auto">
+            <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Usuarios
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" href="/#/user">{{ "  Registrar  "}}</a>
+            </div>
+          </li>
+         
+          <li class="nav-item active">
+            <a class="nav-link" href="/#/table">{{"  Mesas  "}}<span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item active">
-            <a class="nav-link" href="/#/product">|Productos|<span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="/#/product">{{"  Productos  "}}<span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item dropdown ml-auto" v-if="false">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
