@@ -1,36 +1,32 @@
 <template>
     <div class="text-center">
-        <hr>
-        <button v-if="inverso" type="buttom" class="btn btn-primary" @click="cambiar()">{{text}}</button>
-        <div class="card text-left" v-if="!inverso">
+        <div class="card text-left">
             <div class="card-header bg-dark text-white">
-                <button type="buttom" class="btn btn-danger" @click="cambiar()">X</button>
                 {{ $data['title'] }}  
             </div>
             <div class="card-body">
               <div class="form-row">
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-5">
                   <label>Nombre</label>
                   <input type="text" class="form-control" placeholder="Ingrese el nombre" v-model="nombre">
                 </div>
-                <div class="form-group col-md-4">
-                  <label>Clave de acceso</label>
+                <div class="form-group col-md-5">
+                  <label>Contraseña de acceso</label>
                   <div class="form-row">
                     <div class="form-group col-md-12">
-                      <input type="password" class="form-control" placeholder="Ingrese la clave de acceso" v-model="token">
+                      <input type="password" class="form-control" placeholder="Ingrese la contraseña de acceso" v-model="clave">
                     </div>
                   </div>
                 </div>
-                <div class="form-group col-md-4">
-                  <label>Confirmacion de clave de acceso</label>
+                <div class="form-group col-md-2">
                   <div class="form-row">
-                    <div class="form-group col-md-12">
-                      <input type="password" class="form-control" placeholder="Ingrese la confirmación de la clave de acceso" v-model="confirmacionToken">
-                    </div>
-                  </div>
-                </div>
+                    <div class="form-group col-md-12 ">
+                      <br>
+                      <button type="button" class="btn btn-primary" style="margin-top: 8px;" @click="createdUser">Acceder</button>
+                    </div>              
+                  </div>              
+                </div>              
               </div>              
-              <button type="button" class="btn btn-primary" @click="createdTable">Guardar</button>
             </div>
         </div>
     </div>
@@ -45,34 +41,21 @@
       text: String,   
     },
     data: () => ({
-      title: "Creación de mesa",
-      inverso: true,
-      confirmacionToken:"",
-      token:"",
+      title: "Acceso de usuario",
+      clave:"",
       nombre:"",
     }),
     methods: {
-      cambiar(){
-          this.inverso = !this.inverso        
-      },
       ifErrorList(listErrors){
         if(this.nombre == ""){
-          listErrors.push("El nombre de la mesa es requerido")
+          listErrors.push("El nombre de la usuario es requerido")
         }
-        if(this.token == ""){  
-          listErrors.push("La clave de acceso a la mesa es requerido")
-        }
-        
-        if(this.token.length < 6){
-          listErrors.push("La clave de acceso debe tener 6 caracteres o digitos")
+        if(this.clave == ""){  
+          listErrors.push("La contraseña de acceso a la usuario es requerido")
         }
         
-        if(this.confirmacionToken == ""){  
-          listErrors.push("La confirmación clave de acceso a la mesa es requerido")
-        }
-        
-        if(this.token != this.confirmacionToken){  
-          listErrors.push("La clave y su confirmación correspondiente deben ser iguales")
+        if(this.clave.length < 6){
+          listErrors.push("La contraseña de acceso debe tener 6 caracteres o digitos")
         }
         return listErrors
       },
@@ -99,30 +82,30 @@
           return true;
         }
       },
-      createTableXML: function(item){
+      createUserXML: function(item){
               return '\
           <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:web="http://www.webserviceX.NET/">\
               <soapenv:Header/>\
               <soapenv:Body>\
               <__call>\
-                  <method_name>createTable</method_name>\
+                  <method_name>loginUser</method_name>\
                   <arguments>\
-                      <authentication xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">'+localStorage.getItem('token-access-user')+'</authentication>\
-                      <nombre xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">'+item.nombre+'</nombre>\
-                      <token xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">'+item.token+'</token>\
+                    <authentication xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">15hyhy</authentication>\
+                    <nombre xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">'+item.nombre+'</nombre>\
+                    <clave xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">'+item.clave+'</clave>\
                   </arguments>\
               </__call>\
               </soapenv:Body>\
           </soapenv:Envelope>';
       },
-      createdTable: function (){
+      createdUser: function (){
 
         if(this.validateData() === true){  
           let X2JS = new x2js()
           let contenido = this
           axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
-          axios.post('http://localhost/projects/soap_project/Route/Table.php',
-              this.createTableXML(contenido),{
+          axios.post('http://localhost/projects/soap_project/Route/User.php',
+              this.createUserXML(contenido),{
                   headers:{
                       'Content-Type': 'text/xml',
                       'Accept': 'text/xml',
@@ -131,22 +114,31 @@
                 let jsonObj = X2JS.xml2js(res.data);
                 window.test = jsonObj;
                 let resultado = ''
+                
                 for (let row of jsonObj.Envelope.Body.__callResponse.return.item){
-                  if(row.key.toString() == "status" && row.value.toString() == "success"){
+                  
+                  if(row.key.toString() == "status"){
                     resultado = row.value.toString();
                   }
-                  if(resultado == "success" && row.key.toString() == "message"){
-                    
-                    contenido.nombre = ""
-                    contenido.token = ""
-                    contenido.confirmacionToken = ""
-                    contenido.cambiar()
-                    contenido.$emit("click", 'refresh')
 
+                  if(resultado == "success" && row.key.toString() == "token"){
+                    localStorage.setItem('token-access-user', row.value.toString())
+                    location.href = "/#/dashboard"
+                  }
+
+                  if(resultado == "success" && row.key.toString() == "message"){
                     Swal.fire({
-                      title: 'Respuesta por creación!',
+                      title: 'Respuesta por acceso!',
                       text: row.value.toString(),
                       icon: 'success',
+                      confirmButtonText: 'Cerrar'
+                    })
+                  }
+                  if(resultado == "error" && row.key.toString() == "message"){
+                    Swal.fire({
+                      title: 'Respuesta por error!',
+                      text: row.value.toString(),
+                      icon: 'warning',
                       confirmButtonText: 'Cerrar'
                     })
                   }

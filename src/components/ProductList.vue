@@ -74,6 +74,7 @@
 
 <script>
     import x2js from 'x2js';
+    import Swal from 'sweetalert2';
     import axios from 'axios';
     import ProductCreate from "./ProductCreate.vue";
     export default {
@@ -98,7 +99,7 @@
                     <__call>\
                         <method_name>getListProduct</method_name>\
                         <arguments>\
-                            <authentication xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">15hyhy</authentication>\
+                            <authentication xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">'+localStorage.getItem('token-access-user')+'</authentication>\
                             <filter xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">'+filtro+'</filter>\
                         </arguments>\
                     </__call>\
@@ -132,6 +133,24 @@
             getFormatMoney(numeros){
                 let partes = numeros.toFixed(2).split(".");
                 return partes[0].replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + (partes[1] ? "." + partes[1] : "");
+            },accessModule(jsonObj){
+                let resultado = ''
+                if(jsonObj.Envelope.Body.__callResponse.return["_SOAP-ENC:arrayType"] != "xsd:ur-type[0]" && Array.isArray(jsonObj.Envelope.Body.__callResponse.return.item)){
+                    for (let row of jsonObj.Envelope.Body.__callResponse.return.item){
+                        if(row.item != undefined){
+                            return true;
+                        }
+                        if(row.key.toString() == "status"){
+                            resultado = row.value.toString();
+                        }
+                        if(resultado == "error-autentication" && row.key.toString() == "message"){
+                            alert(row.value.toString())
+                            location.href = "/#/user-access"
+                            return false;
+                        }
+                    }
+                }
+                return true;
             },
             getListProducts: function (){
                 let X2JS = new x2js()
@@ -154,9 +173,10 @@
                         }
                     }).then((res)=>{
                         let jsonObj = X2JS.xml2js(res.data);
-
                         let dataTable = []
-
+                        if(!contenido.accessModule(jsonObj)){
+                            return; 
+                        }
                         if(jsonObj.Envelope.Body.__callResponse.return["_SOAP-ENC:arrayType"] == "xsd:ur-type[0]"){
                             contenido.responseText = "No hay resultados en la busqueda";
                         }else if(Array.isArray(jsonObj.Envelope.Body.__callResponse.return.item)){

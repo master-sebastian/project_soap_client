@@ -43,15 +43,11 @@
     },
     data: () => ({
       title: "Registro de usuario",
-      inverso: true,
       confirmacionClave:"",
       clave:"",
       nombre:"",
     }),
     methods: {
-      cambiar(){
-          this.inverso = !this.inverso        
-      },
       ifErrorList(listErrors){
         if(this.nombre == ""){
           listErrors.push("El nombre de la usuario es requerido")
@@ -147,7 +143,6 @@
                       confirmButtonText: 'Cerrar'
                     })
                   }
-                  console.log(row)
                   if(resultado == "error" && row.key.toString() == "message"){
                     Swal.fire({
                       title: 'Respuesta por error!',

@@ -11,7 +11,7 @@
             <a class="nav-link" href="/#/login">{{"  Ingresar como cliente  "}}<span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item active">
-            <a class="nav-link" href="/#/login">{{"  Ingresar como administrador  "}}<span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="/#/user-access">{{"  Ingresar como administrador  "}}<span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item dropdown ml-auto">
             <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

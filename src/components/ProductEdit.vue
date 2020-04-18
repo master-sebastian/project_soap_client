@@ -187,7 +187,7 @@
               <__call>\
                   <method_name>editProduct</method_name>\
                   <arguments>\
-                      <authentication xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">15hyhy</authentication>\
+                      <authentication xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">'+localStorage.getItem('token-access-user')+'</authentication>\
                       <id xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">'+item.id+'</id>\
                       <costo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">'+item.costo+'</costo>\
                       <ganancia xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:float">'+item.ganancia+'</ganancia>\
@@ -209,7 +209,7 @@
               <__call>\
                   <method_name>getProduct</method_name>\
                   <arguments>\
-                      <authentication xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">15hyhy</authentication>\
+                      <authentication xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">'+localStorage.getItem('token-access-user')+'</authentication>\
                       <id xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">'+item.id+'</id>\
                   </arguments>\
               </__call>\
@@ -230,6 +230,9 @@
               let jsonObj = X2JS.xml2js(res.data);
               window.test = jsonObj;
               let resultado = ''
+              if(!contenido.accessModule(jsonObj)){
+                return; 
+              }
               for (let row of jsonObj.Envelope.Body.__callResponse.return.item.item){
                 if(["descripcion","nombre", 'url_img','estado'].includes(row.key.toString())){
                   contenido[row.key.toString()] = row.value.toString()
@@ -242,6 +245,25 @@
                 console.log(err)
             }
         );
+      },
+      accessModule(jsonObj){
+          let resultado = ''
+          if(jsonObj.Envelope.Body.__callResponse.return["_SOAP-ENC:arrayType"] != "xsd:ur-type[0]" && Array.isArray(jsonObj.Envelope.Body.__callResponse.return.item)){
+              for (let row of jsonObj.Envelope.Body.__callResponse.return.item){
+                  if(row.item != undefined){
+                      return true;
+                  }
+                  if(row.key.toString() == "status"){
+                      resultado = row.value.toString();
+                  }
+                  if(resultado == "error-autentication" && row.key.toString() == "message"){
+                      alert(row.value.toString())
+                      location.href = "/#/user-access"
+                      return false;
+                  }
+              }
+          }
+          return true;
       },
       editProduct: function (){
         if(this.validateData() === true){  
@@ -258,6 +280,9 @@
                 let jsonObj = X2JS.xml2js(res.data);
                 window.test = jsonObj;
                 let resultado = ''
+                if(!contenido.accessModule(jsonObj)){
+                  return; 
+                }
                 for (let row of jsonObj.Envelope.Body.__callResponse.return.item){
                   if(row.key.toString() == "status" && row.value.toString() == "success"){
                     resultado = row.value.toString();
