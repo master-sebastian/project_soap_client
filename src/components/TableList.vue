@@ -92,6 +92,24 @@
                 for(let item of aux){
                     this.list.push(item)
                 }
+            },accessModule(jsonObj){
+                let resultado = ''
+                if(jsonObj.Envelope.Body.__callResponse.return["_SOAP-ENC:arrayType"] != "xsd:ur-type[0]" && Array.isArray(jsonObj.Envelope.Body.__callResponse.return.item)){
+                    for (let row of jsonObj.Envelope.Body.__callResponse.return.item){
+                        if(row.item != undefined){
+                            return true;
+                        }
+                        if(row.key.toString() == "status"){
+                            resultado = row.value.toString();
+                        }
+                        if(resultado == "error-autentication" && row.key.toString() == "message"){
+                            alert(row.value.toString())
+                            location.href = "/#/user-access"
+                            return false;
+                        }
+                    }
+                }
+                return true;
             },
             getListTablesXML: function(filtro){
                     return '\
@@ -131,7 +149,9 @@
                         let jsonObj = X2JS.xml2js(res.data);
 
                         let dataTable = []
-
+                        if(!contenido.accessModule(jsonObj)){
+                            return; 
+                        }
                         if(jsonObj.Envelope.Body.__callResponse.return["_SOAP-ENC:arrayType"] == "xsd:ur-type[0]"){
                             contenido.responseText = "No hay resultados en la busqueda";
                         }else if(Array.isArray(jsonObj.Envelope.Body.__callResponse.return.item)){

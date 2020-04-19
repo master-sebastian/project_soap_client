@@ -98,6 +98,24 @@
         }else{
           return true;
         }
+      },accessModule(jsonObj){
+          let resultado = ''
+          if(jsonObj.Envelope.Body.__callResponse.return["_SOAP-ENC:arrayType"] != "xsd:ur-type[0]" && Array.isArray(jsonObj.Envelope.Body.__callResponse.return.item)){
+              for (let row of jsonObj.Envelope.Body.__callResponse.return.item){
+                  if(row.item != undefined){
+                      return true;
+                  }
+                  if(row.key.toString() == "status"){
+                      resultado = row.value.toString();
+                  }
+                  if(resultado == "error-autentication" && row.key.toString() == "message"){
+                      alert(row.value.toString())
+                      location.href = "/#/user-access"
+                      return false;
+                  }
+              }
+          }
+          return true;
       },
       createTableXML: function(item){
               return '\
