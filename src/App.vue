@@ -8,7 +8,7 @@
       <div class="collapse navbar-collapse justify-content-between" id="navbarText">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="/#/login">{{"  Ingresar como cliente  "}}<span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="/#/table-access">{{"  Ingresar como cliente  "}}<span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item active">
             <a class="nav-link" href="/#/user-access">{{"  Ingresar como administrador  "}}<span class="sr-only">(current)</span></a>

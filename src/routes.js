@@ -5,10 +5,16 @@ import ProductEdit from './components/ProductEdit.vue'
 import UserCreate from './components/UserCreate.vue'
 import UserAccess from './components/UserAccess.vue'
 import Dashboard from './components/Dashboard.vue'
+import TableAccess from './components/TableAccess.vue'
 export const routes = [
   {
+    path: '/table-access',
+    name: 'TableAccess',
+    component: TableAccess
+  },
+  {
     path: '/dashboard',
-    name: 'dashboard',
+    name: 'Dashboard',
     component: Dashboard
   },
   {
