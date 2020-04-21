@@ -6,7 +6,13 @@ import UserCreate from './components/UserCreate.vue'
 import UserAccess from './components/UserAccess.vue'
 import Dashboard from './components/Dashboard.vue'
 import TableAccess from './components/TableAccess.vue'
+import ProductRequest from './components/ProductRequest.vue'
 export const routes = [
+  {
+    path: '/product-request',
+    name: 'ProductRequest',
+    component: ProductRequest
+  },
   {
     path: '/table-access',
     name: 'TableAccess',
