@@ -16,20 +16,16 @@
                             <button type="button" class="btn btn-primary" @click="getListTables()" style="margin-top: 8px">Buscar</button>                
                         </div>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-12">
-                            <table-create text="Agregar" @click="eventoAlCrear"></table-create>
-                        </div>
-                    </div>
                 </form>
                 <hr>
                 <div class="table-responsive" style="height: 400px;overflow-y: auto;">
                     <table class="table">
                         <thead>
                             <tr>
-                                <th class="text-center">Nombre</th>
-                                <th class="text-center">Clave de acceso</th>
-                                <th colspan="2" class="text-center">Acciones</th>
+                                <th class="text-center">Nombre de la mesa</th>
+                                <th class="text-center">$ Debe COP</th>
+                                <th class="text-center">$ Recaudado en el dia de hoy COP</th>
+                                <th colspan="1" class="text-center">Acciones</th>
                                 
                             </tr>
                         </thead>
@@ -39,17 +35,11 @@
                             </tr>
                             <tr v-for="(table, index) in list" :key="index">
                                 <td class="text-center">{{ table.nombre }}</td>
-                                <td class="text-center" v-if="table.tokenCheck">{{ table.token }}</td>
-                                <td class="text-center" v-if="!table.tokenCheck">{{ table.tokenNoVisible }}</td>
-                                <td v-if="!table.tokenCheck">
-                                    <button type="button" class="btn btn-warning" @click="cambiarEstado(table)" style="margin-top: 8px"> {{ 'Ver_clave'}}</button>
-                                </td>
-                                <td v-if="table.tokenCheck">
-                                    <button type="button" class="btn btn-warning" @click="cambiarEstado(table)" style="margin-top: 8px">{{'Ocultar_clave'}}</button>
-                                </td>
+                                <td class="text-center">{{ getFormatMoney(table.d) }}</td>
+                                <td class="text-center">{{ getFormatMoney(table.r) }}</td>
                                 <td class="text-center">
-                                    <a class="btn btn-success" v-bind:href="'/#/table/edit/'+table.id" style="margin-top: 8px">Editar</a>
-                                </td>                                
+                                    <a class="btn btn-info" v-bind:href="'/#/product-request-admin/'+table.id" style="margin-top: 8px">Pedidos_Pendientes</a>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -74,11 +64,15 @@
             return {
                 list: [],
                 articulo: "",
-                title: "Listado de mesas",
+                title: "Estado de cuenta de las mesas",
                 responseText:""
             };
         },
         methods: {
+            getFormatMoney(numeros){
+                let partes = numeros.toFixed(2).split(".");
+                return partes[0].replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + (partes[1] ? "." + partes[1] : "");
+            },
             cambiarEstado: function(table){
                 table.tokenCheck = !table.tokenCheck
                 let aux = this.list
@@ -111,10 +105,9 @@
                     <soapenv:Header/>\
                     <soapenv:Body>\
                     <__call>\
-                        <method_name>getListTable</method_name>\
+                        <method_name>getListTableSummary</method_name>\
                         <arguments>\
                             <authentication xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">'+localStorage.getItem('token-access-user')+'</authentication>\
-                            <filter xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">'+filtro+'</filter>\
                         </arguments>\
                     </__call>\
                     </soapenv:Body>\
@@ -155,6 +148,8 @@
                                     rowTable[colum.key.toString()] = ""
                                     if(["id"].includes(colum.key.toString())){
                                         rowTable[colum.key.toString()] = parseInt(colum.value.toString()) 
+                                    }else if(["r","d"].includes(colum.key.toString())){
+                                        rowTable[colum.key.toString()] = parseFloat(colum.value.toString()) 
                                     }else if(["nombre", "token"].includes(colum.key.toString())){
                                         rowTable[colum.key.toString()] = colum.value.toString();
                                         if(["token"].includes(colum.key.toString())){
@@ -203,6 +198,10 @@
             }
         },created(){
             this.getListTables()
+            let dataT = this
+            setInterval(function(){
+                dataT.getListTables()
+            }, 60000)
         }
     }
 </script>

@@ -2,7 +2,7 @@
     <div>
         <div class="card">
             <div class="card-header bg-dark text-white">
-                <a class="btn btn-danger" href="/#/table" style="margin-top: 8px">Regresar</a>
+                <a class="btn btn-danger" href="/#/table-list-summary" style="margin-top: 8px">Regresar</a>
                 {{ $data['title'] }}
             </div>
             <div class="card-body">

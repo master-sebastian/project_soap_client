@@ -1,4 +1,5 @@
 import TableList from './components/TableList.vue'
+import TableListSummary from './components/TableListSummary.vue'
 import TableEdit from './components/TableEdit.vue'
 import ProductList from './components/ProductList.vue'
 import ProductEdit from './components/ProductEdit.vue'
@@ -10,6 +11,11 @@ import ProductRequest from './components/ProductRequest.vue'
 import ProductRequestAdmin from './components/ProductRequestAdmin.vue'
 
 export const routes = [
+  {
+    path: '/table-list-summary',
+    name: 'TableListSummary',
+    component: TableListSummary
+  },
   {
     path: '/product-request-admin/:idTable',
     name: 'ProductRequestAdmin',

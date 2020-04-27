@@ -29,6 +29,9 @@
             <a class="nav-link" href="/#/table">{{"  Mesas  "}}<span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item active">
+            <a class="nav-link" href="/#/table-list-summary">{{"  Saldos  "}}<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item active">
             <a class="nav-link" href="/#/product">{{"  Productos  "}}<span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item dropdown ml-auto" v-if="false">

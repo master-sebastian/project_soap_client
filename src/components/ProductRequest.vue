@@ -160,7 +160,6 @@
                         if(row.item != undefined){
                             return true;
                         }
-                        console.log(row)
                         if(row.key.toString() == "status"){
                             resultado = row.value.toString();
                         }
