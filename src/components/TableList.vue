@@ -51,11 +51,8 @@
                                     <a class="btn btn-success" v-bind:href="'/#/table/edit/'+table.id" style="margin-top: 8px">Editar</a>
                                 </td>                                
                                 <td class="text-center">
-                                    <a class="btn btn-info" v-bind:href="'/#/table/edit/'+table.id" style="margin-top: 8px">Pedidos</a>
-                                </td>                                
-                               
-
-                                
+                                    <a class="btn btn-info" v-bind:href="'/#/product-request-admin/'+table.id" style="margin-top: 8px">Pedidos</a>
+                                </td>
                             </tr>
                         </tbody>
                     </table>

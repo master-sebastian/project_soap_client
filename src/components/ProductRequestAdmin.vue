@@ -2,29 +2,15 @@
     <div>
         <div class="card">
             <div class="card-header bg-dark text-white">
+                <a class="btn btn-danger" href="/#/table" style="margin-top: 8px">Regresar</a>
                 {{ $data['title'] }}
             </div>
             <div class="card-body">
-                
                 <div class="row">
-                    <div class="col-lg-4">
-                        <div class="card" v-for="(producto, index) in list" :key="index">
-                            <div class="card-body text-center">
-                                <div class="alert alert-success" role="alert">
-                                    <h5 class="alert-heading">Nombre: </b>{{ producto.nombre }}</h5>
-                                </div>
-                                <img :src="producto.url_img" height="200px" class="card-img-top">
-                                <div class="alert alert-warning" role="alert">
-                                    <p><b>Descripcion: </b> {{producto.descripcion}}</p>
-                                    <hr>
-                                    <p class="mb-0"><b> Precio: </b>$ {{ getFormatMoney(producto.precio) }} COP</p>
-                                </div>
-                                <button type="button" class="btn btn-primary" @click="agregarALaCuenta(producto)">Agregar</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-8">
+                    <div class="col-lg-12">
                         <h2>Total a pagar actual </h2> <h3>$ {{ getFormatMoney(valorAPagar) }} COP</h3>
+                        <hr>
+                        <button type="button" class="btn btn-info" @click="payInvoice()">Pagar cuenta</button>
                         <hr>
                         <table class="table">
                             <thead>
@@ -60,14 +46,15 @@
     import Swal from 'sweetalert2';
     import axios from 'axios';
     export default {
-        name: 'product-request',
+        name: 'product-request-admin',
         data() {
             return {
                 list: [], //Lista de productos de la empresa
                 list1: [], //Lista de productos solicitados en la mesa que esta autenticada
                 articulo: "",
-                title: "Catalogo de productos",
+                title: "Cuenta de la mesa",
                 responseText:"",
+                idMesa:"",
                 valorAPagar: 0
             };
         },
@@ -77,6 +64,22 @@
                 for (let item = 0; item < this.list1.length; item++){
                     this.valorAPagar += this.list1[item].precio
                 }
+            },
+            getPayInvoiceXML: function(){
+                    return '\
+                <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:web="http://www.webserviceX.NET/">\
+                    <soapenv:Header/>\
+                    <soapenv:Body>\
+                    <__call>\
+                        <method_name>payInvoice</method_name>\
+                        <arguments>\
+                            <authentication xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">'+localStorage.getItem('token-access-user')+'</authentication>\
+                            <total xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">'+this.valorAPagar+'</total>\
+                            <idMesa xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">'+this.idMesa+'</idMesa>\
+                        </arguments>\
+                    </__call>\
+                    </soapenv:Body>\
+                </soapenv:Envelope>';
             },
             getAddProductsXML: function(product){
                     return '\
@@ -118,9 +121,10 @@
                     <soapenv:Header/>\
                     <soapenv:Body>\
                     <__call>\
-                        <method_name>getListProductsCommand</method_name>\
+                        <method_name>getListProductsCommandAdmin</method_name>\
                         <arguments>\
                             <authentication xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">'+localStorage.getItem('token-access-user')+'</authentication>\
+                            <idMesa xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">'+this.idMesa+'</idMesa>\
                         </arguments>\
                     </__call>\
                     </soapenv:Body>\
@@ -160,7 +164,6 @@
                         if(row.item != undefined){
                             return true;
                         }
-                        console.log(row)
                         if(row.key.toString() == "status"){
                             resultado = row.value.toString();
                         }
@@ -172,9 +175,6 @@
                     }
                 }
                 return true;
-            },
-            agregarALaCuenta(item){
-                this.sendAddProduct(item)
             },
             getListProductCommand: function (){
                 let X2JS = new x2js()
@@ -244,14 +244,14 @@
                     }
                 );
             },
-            sendAddProduct: function (itemSend){
+            payInvoice: function (){
                 let X2JS = new x2js()
 
                 let contenido = this
 
                 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
                 axios.post('http://localhost/projects/soap_project/Route/Table.php',
-                    this.getAddProductsXML(itemSend),{
+                    this.getPayInvoiceXML(),{
                         headers:{
                             'Content-Type': 'text/xml',
                             'Accept': 'text/xml',
@@ -266,7 +266,7 @@
 
                         let resultado = ''
                         for (let row of jsonObj.Envelope.Body.__callResponse.return.item){
-                            if(row.key.toString() == "status" && row.value.toString() == "success"){
+                            if(row.key.toString() == "status" && (row.value.toString() == "success" || row.value.toString() == "warning")){
                                 resultado = row.value.toString();
                             }
                             
@@ -274,9 +274,19 @@
                                 contenido.getListProductCommand()
                                 contenido.calcularValorAPagar()
                                 Swal.fire({
-                                    title: 'Respuesta por solicitud!',
+                                    title: 'Respuesta por pago!',
                                     text: row.value.toString(),
                                     icon: 'success',
+                                    confirmButtonText: 'Cerrar'
+                                })
+                            }
+                            if(resultado == "warning" && row.key.toString() == "message"){
+                                contenido.getListProductCommand()
+                                contenido.calcularValorAPagar()
+                                Swal.fire({
+                                    title: 'Respuesta por pago!',
+                                    text: row.value.toString(),
+                                    icon: 'warning',
                                     confirmButtonText: 'Cerrar'
                                 })
                             }
@@ -363,7 +373,8 @@
                 }
             }
         },created(){
-            this.getListProducts()
+            //this.getListProducts()
+            this.idMesa = this.$route.params.idTable
             this.getListProductCommand()
         }
     }

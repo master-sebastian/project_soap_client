@@ -7,7 +7,14 @@ import UserAccess from './components/UserAccess.vue'
 import Dashboard from './components/Dashboard.vue'
 import TableAccess from './components/TableAccess.vue'
 import ProductRequest from './components/ProductRequest.vue'
+import ProductRequestAdmin from './components/ProductRequestAdmin.vue'
+
 export const routes = [
+  {
+    path: '/product-request-admin/:idTable',
+    name: 'ProductRequestAdmin',
+    component: ProductRequestAdmin
+  },
   {
     path: '/product-request',
     name: 'ProductRequest',
