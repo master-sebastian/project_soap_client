@@ -123,7 +123,7 @@
 
                   if(resultado == "success" && row.key.toString() == "token"){
                     localStorage.setItem('token-access-user', row.value.toString())
-                    location.href = "/#/dashboard"
+                    location.href = "/#/dashboard-admin"
                   }
 
                   if(resultado == "success" && row.key.toString() == "message"){

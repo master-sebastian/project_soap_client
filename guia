@@ -11,3 +11,5 @@ https://www.npmjs.com/package/axios
 https://stackoverflow.com/questions/43807876/vuejs-webpack-static-folder-not-working-in-subfolder
 
 npm install sweetalert2
+
+npm install chart.js --save

@@ -6,11 +6,17 @@ import ProductEdit from './components/ProductEdit.vue'
 import UserCreate from './components/UserCreate.vue'
 import UserAccess from './components/UserAccess.vue'
 import Dashboard from './components/Dashboard.vue'
+import DashboardAdmin from './components/DashboardAdmin.vue'
 import TableAccess from './components/TableAccess.vue'
 import ProductRequest from './components/ProductRequest.vue'
 import ProductRequestAdmin from './components/ProductRequestAdmin.vue'
 
 export const routes = [
+  {
+    path: '/dashboard-admin',
+    name: 'DashboardAdmin',
+    component: DashboardAdmin
+  },
   {
     path: '/table-list-summary',
     name: 'TableListSummary',
